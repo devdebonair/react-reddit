@@ -4,7 +4,10 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const port = process.env.PORT || 3000;
 
 module.exports = {
-	entry: ['react-hot-loader/patch', './src/index.js'],
+	entry: {
+		vendor: ['semantic-ui-react'],
+		app: ['react-hot-loader/patch', './src/index.js']
+	},
 	output: {
 		filename: '[name].[hash].js',
 		publicPath: "/"
@@ -42,7 +45,11 @@ module.exports = {
 		}),
 		new webpack.NamedModulesPlugin(),
 		new webpack.HotModuleReplacementPlugin(),
-		new webpack.NoEmitOnErrorsPlugin()
+		new webpack.NoEmitOnErrorsPlugin(),
+		new webpack.optimize.CommonsChunkPlugin({
+			name: ['vendor'],
+			minChunks: Infinity
+		})
 	],
 	devServer: {
 		host: 'localhost',
