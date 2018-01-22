@@ -12,8 +12,6 @@ module.exports = env => {
         throw new Error(buildValidations.ERR_NO_ENV_FLAG)
     }
 
-    console.log(env.env)
-
     const envConfig = require(`./build-utils/webpack.${env.env}.js`)
 
     const mergedConfig = webpackMerge(
