@@ -6,7 +6,7 @@ const port = process.env.PORT || 3000;
 module.exports = {
 	entry: ['react-hot-loader/patch', './src/index.js'],
 	output: {
-		filename: 'bundle.[hash].js',
+		filename: '[name].[hash].js',
 		publicPath: "/"
 	},
 	devtool: "inline-source-map",
