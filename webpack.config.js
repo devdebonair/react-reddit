@@ -4,7 +4,7 @@ const webpackMerge = require('webpack-merge')
 
 const addons = (/* string | string[] */ addonsArg) => {
     let addons = [...[addonsArg]].filter(Boolean)
-    return addons.map(addon => require(`./build-utils/addons/webpack.${addonName}.js`))
+    return addons.map(addonName => require(`./build-utils/addons/webpack.${addonName}.js`))
 }
 
 module.exports = env => {
