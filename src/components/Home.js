@@ -2,6 +2,8 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 import Layout from './Layout'
+import Search from './search'
+import Post from './post'
 
 const Home = () => {
     return (
