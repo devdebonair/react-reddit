@@ -3,6 +3,26 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import App from './components/App'
 
+const store = {
+    posts: [
+        {
+            title: "Introducing RLCS Season 5 + the brand new RL Esports website!"
+        },
+        {
+            title: "Half flip practice is paying off"
+        },
+        {
+            title: "Stop telling people to \"kill yourself\" or \"hope you get cancer and die"
+        },
+        {
+            title: "Neat kick-off strat"
+        },
+        {
+            title: "Done 'em good"
+        }
+    ]
+}
+
 const render = Component => {
     ReactDOM.render(
         <AppContainer>
