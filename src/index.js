@@ -2,8 +2,13 @@ import { AppContainer } from "react-hot-loader"
 import React from 'react'
 import ReactDOM from 'react-dom'
 import App from './components/App'
+import { Provider } from 'react-redux'
+import { createStore } from 'redux'
+import reducers from './reducers'
 
-const store = {
+
+const defaultStore = {
+    subreddit: "Rocket League",
     posts: [
         {
             title: "Introducing RLCS Season 5 + the brand new RL Esports website!"
@@ -23,10 +28,14 @@ const store = {
     ]
 }
 
+let store = createStore(reducers, defaultStore)
+
 const render = Component => {
     ReactDOM.render(
         <AppContainer>
-            <Component />
+            <Provider store={store}>
+                <Component />
+            </Provider>
         </AppContainer>,
         document.getElementById('root')
     )

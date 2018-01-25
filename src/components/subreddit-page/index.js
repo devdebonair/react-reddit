@@ -1,14 +1,16 @@
 import React from 'react'
-import styles from 'styles.css'
+import styles from './styles.css'
 
 import SearchBar from '../search'
 import PostList from '../post-list'
 
-cosnt SubredditPage = ({ term, posts, onSearch }) => {
+const SubredditPage = ({ subreddit, posts, onSearch }) => {
     return (
         <div>
-            <SearchBar term={term} />
+            <SearchBar term={subreddit} onSearch={onSearch} />
             <PostList posts={posts} />
         </div>
     )
 }
+
+export default SubredditPage

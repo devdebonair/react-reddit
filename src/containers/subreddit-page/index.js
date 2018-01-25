@@ -1,24 +1,26 @@
 import { connect } from 'react-redux'
-import { search } from '../../actions/search'
+import * as Actions from '../../actions'
 
 import SubredditPage from '../../components/subreddit-page'
 
-const mapStateToProps = ({ term }) => {
+const mapStateToProps = ({ subreddit, posts }) => {
     return  {
-        term,
+        subreddit,
         posts
     }
 }
 
-const mapDispatchToProps = ({ dispatch }) => {
+const mapDispatchToProps = dispatch => {
     return {
-        onSearch: (term) => {
-            dispatch(search(term))
+        onSearch: (subreddit) => {
+            dispatch(Actions.selectSubreddit(subreddit))
         }
     }
 }
 
-const SubredditPage = connect(
+const RedditSearch = connect(
     mapStateToProps,
     mapDispatchToProps
 )(SubredditPage)
+
+export default RedditSearch

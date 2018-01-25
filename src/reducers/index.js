@@ -1,3 +1,3 @@
 import { combineReducers } from 'redux'
-import * as post from './posts'
-export default combineReducers(post)
+import * as reducers from './reducer'
+export default combineReducers(reducers)
