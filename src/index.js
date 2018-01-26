@@ -3,32 +3,17 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import App from './components/App'
 import { Provider } from 'react-redux'
-import { createStore } from 'redux'
+import { createStore, applyMiddleware } from 'redux'
+import { middleware as reduxPackMiddleware } from "redux-pack";
 import reducers from './reducers'
 
-
 const defaultStore = {
-    subreddit: "Rocket League",
-    posts: [
-        {
-            title: "Introducing RLCS Season 5 + the brand new RL Esports website!"
-        },
-        {
-            title: "Half flip practice is paying off"
-        },
-        {
-            title: "Stop telling people to \"kill yourself\" or \"hope you get cancer and die"
-        },
-        {
-            title: "Neat kick-off strat"
-        },
-        {
-            title: "Done 'em good"
-        }
-    ]
+    subreddit: "",
+    posts: [],
+    isLoading: false
 }
 
-let store = createStore(reducers, defaultStore)
+let store = createStore(reducers, defaultStore, applyMiddleware(reduxPackMiddleware))
 
 const render = Component => {
     ReactDOM.render(

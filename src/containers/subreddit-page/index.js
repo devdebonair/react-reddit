@@ -3,17 +3,18 @@ import * as Actions from '../../actions'
 
 import SubredditPage from '../../components/subreddit-page'
 
-const mapStateToProps = ({ subreddit, posts }) => {
+const mapStateToProps = ({ subreddit, posts, isLoading }) => {
     return  {
         subreddit,
-        posts
+        posts,
+        isLoading
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
         onSearch: (subreddit) => {
-            dispatch(Actions.selectSubreddit(subreddit))
+            dispatch(Actions.requestPosts(subreddit))
         }
     }
 }

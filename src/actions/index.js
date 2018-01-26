@@ -1,3 +1,7 @@
+import snoowrap from 'snoowrap'
+
+// Add snoowrap config
+
 export const SELECT_SUBREDDIT = "SELECT_SUBREDDIT"
 export const selectSubreddit = (subreddit) => {
     return {
@@ -9,19 +13,9 @@ export const selectSubreddit = (subreddit) => {
 }
 
 export const REQUEST_POSTS = "REQUEST_POSTS"
-export const requestPosts = () => {
+export const requestPosts = (subreddit) => {
     return {
         type: REQUEST_POSTS,
-        payload: {}
-    }
-}
-
-export const RECEIVE_POSTS = "RECEIVE_POSTS"
-export const receivePosts = (posts) => {
-    return {
-        type: RECEIVE_POSTS,
-        payload: {
-            posts
-        }
+        promise: r.getSubreddit(subreddit).getHot()
     }
 }
