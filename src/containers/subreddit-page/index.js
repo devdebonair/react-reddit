@@ -4,7 +4,7 @@ import * as Actions from '../../actions'
 import SubredditPage from '../../components/subreddit-page'
 
 const mapStateToProps = ({ subreddit, posts, isLoading }) => {
-    return  {
+    return {
         subreddit,
         posts,
         isLoading

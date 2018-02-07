@@ -1,0 +1,313 @@
+{
+    "actions": {
+        "types": ["SELECT_SUBREDDIT", "REQUEST_POSTS"],
+        "creators": [
+            {
+                "name": "selectSubreddit",
+                "parameters": [
+                    { "name": "subreddit", "type": "String", "default": null }
+                ],
+                "async": false,
+                "type": "SELECT_SUBREDDIT",
+                "payload": {
+                    "subreddit": "parameter:subreddit"
+                }
+            },
+            {
+                "name": "requestPosts",
+                "parameters": [
+                    { "name": "subreddit", "type": "String", "default": null }
+                ],
+                "async": true,
+                "type": "REQUEST_POSTS",
+                "promise": "const r=new snoowrap({userAgent:\"nodev7.2.1:jiNIOlneh6TvXQ:1.0 (by /u/catalystlive)\",clientId:\"MeEU261ljtCJMg\",clientSecret:\"YQZda7J9vym-9pvT5DlpLPmxd1Y\",username:\"catalystlive\",password:\"kiddollars\"});r.getSubreddit(subreddit).getHot();"
+            }
+        ]
+    },
+    "reducers": [
+        {
+            "name": "subreddit",
+            "defaultState": "",
+            "actions": [
+                {
+                    "type": "SELECT_SUBREDDIT",
+                    "return": "parameter:action.payload",
+                    "async": false
+                }
+            ]
+        },
+        {
+            "name": "posts",
+            "defaultState": [],
+            "actions": [
+                {
+                    "type": "REQUEST_POSTS",
+                    "async": true,
+                    "return": {
+                        "start": "return [...prevState]",
+                        "failure": "return []",
+                        "success": "payload.map(t=>({title:t.title}));",
+                        "finish": null
+                    }
+                }
+            ]
+        },
+        {
+            "name": "isLoading",
+            "defaultState": false,
+            "actions": [
+                {
+                    "type": "REQUEST_POSTS",
+                    "async": true,
+                    "return": {
+                        "start": "prevState=>true",
+                        "finish": "prevState=>false",
+                        "success": null,
+                        "failure": null
+                    }
+                }
+            ]
+        }
+    ],
+    "components": [
+        {
+            "style": false,
+            "globals": [],
+            "imports": [
+                {
+                    "package": "semantic-ui-react",
+                    "exports": [
+                        { "object": "Header", "as": null }
+                    ]
+                }
+            ],
+            "react": {
+                "name": "post",
+                "props": [
+                    { "name": "title", "type": "String", "defaultValue": null }
+                ],
+                "return": "return (<Header as=\"h3\">{title}</Header>)"
+            }
+        },
+        {
+            "style": false,
+            "globals": [],
+            "imports": [
+                {
+                    "package": "semantic-ui-react",
+                    "exports": [
+                        { "object": "List", "as": null }
+                    ],
+                    "as": null
+                },
+                {
+                    "package": "../post",
+                    "exports": [],
+                    "as": "Post"
+                }
+            ],
+            "react": {
+                "name": "PostList",
+                "props": [
+                    { "name": "posts", "type": "Object", "defaultValue": null }
+                ],
+                "return": "return (<List as=\"ol\">{ posts.map((post, index) => <List.Item key={index}><Post title={post.title} /></List.Item>) }</List>)"
+            }
+        },
+        {
+            "style": false,
+            "globals": [
+                { "name": "inputValue", "type": "String", "defaultValue": "" }
+            ],
+            "imports": [
+                {
+                    "package": "semantic-ui-react",
+                    "exports": [
+                        { "object": "Input", "as": null }
+                    ]
+                }
+            ],
+            "react": {
+                "name": "Search",
+                "props": [
+                    { "name": "term", "type": "String", "defaultValue": "" },
+                    { "name": "onSearch", "type": "Function", "defaultValue": null },
+                    { "name": "isLoading", "type": "Boolean", "defaultValue": false }
+                ],
+                "return": "inputValue=term;const handleAction=n=>onSearch(inputValue),handleOnChange=n=>{inputValue=n.target.value},handleOnKeyUp=n=>{\"Enter\"===n.key&&handleAction()},action={content:\"Search\",onClick:handleAction};return(<Input fluid onChange={handleOnChange} placeholder=\"Search\" icon=\"search\" iconPosition=\"left\" action={action} defaultValue={inputValue} loading={isLoading} onKeyUp={handleOnKeyUp} />);"
+            }
+        },
+        {
+            "style": false,
+            "globals": [],
+            "imports": [
+                {
+                    "package": "../post-list",
+                    "exports": [],
+                    "as": "PostList"
+                },
+                {
+                    "package": "../search",
+                    "exports": [],
+                    "as": "Search"
+                }
+            ],
+            "react": {
+                "name": "SubredditPage",
+                "props": [
+                    { "name": "subreddit", "type": "String", "defaultValue": null },
+                    { "name": "posts", "type": "Object", "defaultValue": null },
+                    { "name": "onSearch", "type": "Function", "defaultValue": null },
+                    { "name": "isLoading", "type": "Boolean", "defaultValue": null }
+                ],
+                "return": "return (<div><SearchBar term={subreddit} onSearch={onSearch} isLoading={isLoading} /><PostList posts={posts} /></div>)"
+            }
+        }
+    ],
+    "containers": [
+        {
+            "name": "RedditSearch",
+            "component": "SubredditPage",
+            "mapStateToProps": {
+                "parameters": [
+                    { "name": "subreddit", "type": "String", "defaultValue": null },
+                    { "name": "posts", "type": "Object", "defaultValue": null },
+                    { "name": "isLoading", "type": "Boolean", "defaultValue": null }
+                ],
+                "returnState": true
+            },
+            "mapDispatchToProps": {
+                "return": "return{onSearch:(subreddit)=>{dispatch(Actions.requestPosts(subreddit))}};"
+            }
+        }
+    ],
+    "pages": [
+        {
+            "imports": [
+                {
+                    "package": "semantic-ui-react",
+                    "exports": [
+                        { "object": "Icon", "as": null },
+                        { "object": "Header", "as": null }
+                    ],
+                    "as": null
+                },
+                {
+                    "package": "./Layout",
+                    "exports": [],
+                    "as": "Layout"
+                }
+            ],
+            "react": {
+                "name": "NoMatch",
+                "props": [],
+                "return": "return (<Layout><Icon name=\"minus circle\" size=\"big\" /><strong>Page not found!</strong></Layout>)"
+            }
+        },
+        {
+            "style": true,
+            "imports": [
+                {
+                    "package": "semantic-ui-react",
+                    "exports": [
+                        { "object": "Header", "as": null },
+                        { "object": "Container", "as": null },
+                        { "object": "Divider", "as": null },
+                        { "object": "Icon", "as": null }
+                    ],
+                    "as": null
+                },
+                {
+                    "package": "react-router-dom",
+                    "exports": [
+                        { "object": "Link", "as": null }
+                    ],
+                    "as": null
+                },
+                {
+                    "package": "./Layout",
+                    "exports": [],
+                    "as": "Layout"
+                },
+                {
+                    "package": "./Layout.css",
+                    "exports": [
+                        { "object": "pullRight", "as": null },
+                        { "object": "h1", "as": null }
+                    ],
+                    "as": null
+                }
+            ],
+            "react": {
+                "name": "Layout",
+                "props": [
+                    { "name": "children", "type": "Object", "defaultValue": null }
+                ],
+                "return": "<Container><Link to=\"/\"><Header as=\"h1\" className={h1}>React Reddit</Header></Link>{children}<Divider /><p className={pullRight}>Made with <Icon name=\"heart\" color=\"red\" /> by Esau Silva</p></Container>"
+            }
+        },
+        {
+            "style": true,
+            "imports": [
+                {
+                    "package": "react-router-dom",
+                    "exports": [
+                        { "object": "Link", "as": null }
+                    ],
+                    "as": null
+                },
+                {
+                    "package": "./Layout",
+                    "exports": [],
+                    "as": "Layout"
+                },
+                {
+                    "package": "../containers/subreddit-page",
+                    "exports": [],
+                    "as": "RedditSearch"
+                }
+            ],
+            "react": {
+                "name": "Home",
+                "props": [],
+                "return": "return (<Layout><RedditSearch /><p>Hello World of React and Webpack! Hot Reloaded :)</p><p><Link to=\"/dynamic\">Navigate to Dynamic Page</Link></p></Layout>)"
+            }
+        },
+        {
+            "style": true,
+            "imports": [
+                {
+                    "package": "semantic-ui-react",
+                    "exports": [
+                        { "object": "Header", "as": null }
+                    ],
+                    "as": null
+                },
+                {
+                    "package": "./Layout",
+                    "exports": [],
+                    "as": "Layout"
+                }
+            ],
+            "react": {
+                "name": "DynamicPage",
+                "props": [],
+                "return": "return (<Layout><Header as=\"h2\">Dynamic Page</Header><p>This page was loaded asynchronously!!!</p></Layout>)"
+            }
+        }
+    ],
+    "routes": [
+        {
+            "path": "/",
+            "page": "Home"
+        },
+        {
+            "path": "/dynamic",
+            "page": "DynamicPage"
+        },
+        {
+            "path": null,
+            "page": "NoMatch"
+        }
+    ]
+}

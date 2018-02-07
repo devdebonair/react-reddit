@@ -1,14 +1,10 @@
 import snoowrap from 'snoowrap'
 
-// Add snoowrap config
-
 export const SELECT_SUBREDDIT = "SELECT_SUBREDDIT"
 export const selectSubreddit = (subreddit) => {
     return {
         type: SELECT_SUBREDDIT,
-        payload: {
-            subreddit
-        }
+        payload: subreddit
     }
 }
 

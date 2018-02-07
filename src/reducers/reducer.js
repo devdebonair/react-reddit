@@ -2,11 +2,13 @@ import * as Actions from '../actions/index'
 import { handle } from "redux-pack";
 
 export const subreddit = (state = "", action) => {
-    switch (action.type) {
+    const { type, payload } = action
+    switch (type) {
         case Actions.SELECT_SUBREDDIT:
-            return action.payload.subreddit
+            return payload
+        default:
+            return state
     }
-    return state
 }
 
 export const posts = (state = [], action) => {
@@ -37,8 +39,7 @@ export const isLoading = (state = false, action) => {
         case Actions.REQUEST_POSTS:
             return handle(state, action, {
                 start: prevState => true,
-                success: prevState => false,
-                failure: prevState => false
+                finish: prevState => false
             })
         default:
             return state
